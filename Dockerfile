@@ -25,4 +25,5 @@ ENV PORT=5000
 EXPOSE 5000
 
 # Launch the app
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:$PORT"]
+
