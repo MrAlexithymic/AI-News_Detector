@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detection Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Comic+Neue&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comic Neue', 'Nunito', cursive;
+            background: linear-gradient(135deg, #fef6e4,rgb(224, 239, 249));
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #444;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+
+            color:rgb(0, 0, 0);
+            text-shadow: 1px 1px #fff;
+            margin-bottom: 30px;
+        }
+
+        .result {
+            background:rgb(255, 255, 255);
+            border: 3px dashed rgb(182, 228, 255);
+            box-shadow: 0 10px 20px rgba(255, 182, 193, 0.3);
+            padding: 30px;
+            border-radius: 16px;
+            max-width: 700px;
+            width: 90%;
+        }
+
+        h2 {
+            color: #6c5b7b;
+            font-size: 1.4rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+             border: 2px solid #b0bec5;
+        }
+
+        strong {
+            font-size: 1.3rem;
+            color: #ff5e7e;
+        }
+
+        a {
+            margin-top: 30px;
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 1rem;
+            text-decoration: none;
+            background-color:rgb(193, 255, 255);
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(255, 182, 193, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            background-color:rgb(153, 253, 255);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <h1> Detection Result</h1>
+    <div class="result">
+        <h2>📜 News Text:</h2>
+        <p>{{ news }}</p>
+
+        <h2>🔍 Prediction:</h2>
+        <p><strong>{{ prediction }}</strong></p>
+    </div>
+    <a href="/">🔁 Check Another</a>
+</body>
+</html>

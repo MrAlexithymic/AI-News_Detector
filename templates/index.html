@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Fake News Detector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Comic Neue', 'Nunito', cursive;
+
+            background: linear-gradient(135deg, #fef6e4,rgb(224, 239, 249));
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        ;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background: #ffffffee;
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+            margin-bottom: 70px;
+            border: 3px dashed rgb(182, 228, 255);
+        }
+
+        h1 {
+            
+            font-size: 2.2rem;
+            color:rgb(0, 0, 0);
+            text-shadow: 1px 1px #fff;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #6c5b7b;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px 1px;
+            font-size: 1rem;
+            background: #fff;
+            border: 2px solid #b0bec5;
+            border-radius: 15px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: border 0.3s ease;
+            resize: vertical;
+            margin-top: 10px;
+        }
+
+        textarea:focus {
+            border-color: #1976d2;
+            outline: none;
+        }
+
+        .or {
+            text-align: center;
+            margin: 20px 0 10px;
+            font-size: 2.2rem;
+            color: #546e7a;
+            font-style:bold:
+        }
+
+        /* Custom file upload style */
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px 20px;
+            background-color:rgb(244, 254, 255);
+            color: #2e3a59;
+            border: 2px dashed #90a4ae;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            background-color:rgb(79, 135, 249);
+        }
+
+        button {
+            margin-top: 30px;
+            width: 100%;
+            background-color:rgb(193, 255, 255);
+            color: black;
+            font-size: 1.5rem;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+            font-family: 'Comic Neue', 'Nunito', cursive;
+        }
+
+        button:hover {
+            background-color:rgb(153, 253, 255);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.7rem;
+            }
+
+            label {
+                font-size: 1rem;
+            }
+
+            button {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Fake News Detector</h1>
+<div class="container">
+    <form action="/predict" method="post" enctype="multipart/form-data">
+        <label>Paste or Type News Article:</label>
+        <textarea name="news" placeholder="Type or paste the news article here..."></textarea>
+
+        <p class="or">OR</p>
+
+        <label>Upload a Screenshot / Image:</label>
+        <div class="file-upload">
+            <label class="file-upload-label">Click to Upload Image</label>
+            <input type="file" name="image" accept="image/*">
+        </div>
+
+        <button type="submit">🔎 Detect</button>
+    </form>
+</div>
+<script>
+    // Wait for DOM to load
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.querySelector('input[type="file"]');
+        const label = document.querySelector('.file-upload-label');
+
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+                label.textContent = 'Uploaded';
+            } else {
+                label.textContent = 'Click to Upload Image';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
