@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: ai-news-detector
+    env: docker
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
