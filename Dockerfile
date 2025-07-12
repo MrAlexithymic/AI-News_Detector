@@ -1,10 +1,14 @@
 # Use base image
+FROM python:3.10-slim-buster
 
-FROM python:3.11-slim
 
 
 # Set working directory
 WORKDIR /app
+
+RUN pip install --no-cache-dir -r requirements.txt \
+ && apt-get clean \
+ && rm -rf /root/.cache /tmp/*
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -18,9 +22,6 @@ RUN apt-get update && apt-get install -y \
 # Install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
-# 👇 Pre-download EasyOCR model (en+hi+mr)
-RUN python -c "import easyocr; easyocr.Reader(['en', 'hi', 'mr'])"
 
 # Copy app files
 COPY . .
