@@ -7,4 +7,5 @@ __pycache__/
 .gitignore
 README.md
 Dockerfile
+render.yaml
 uploads/
