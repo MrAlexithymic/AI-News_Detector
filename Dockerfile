@@ -20,10 +20,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files
 COPY . .
 
-# Environment port for Render
+
+# Set environment port
 ENV PORT=5000
 EXPOSE 5000
 
-# Launch the app
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:$PORT"]
+# Run app with shell so $PORT is interpreted
+CMD bash -c "gunicorn app:app --bind 0.0.0.0:${PORT:-5000}"
+
 
