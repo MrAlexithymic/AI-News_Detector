@@ -18,8 +18,13 @@ client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY")
 )
 
+@st.cache_resource
+def load_model():
+    reader = easyocr.Reader(['en', 'hi', 'mr'], gpu=False)
+    return reader
+
 # Initialize EasyOCR
-reader = easyocr.Reader(['en', 'hi', 'mr'])
+#reader = easyocr.Reader(['en', 'hi', 'mr'])
 
 # Helper Functions
 def fix_common_ocr_errors(text):
