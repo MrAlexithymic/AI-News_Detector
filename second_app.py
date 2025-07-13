@@ -9,22 +9,24 @@ import re
 import unicodedata
 import numpy as np
 
-# Load environment variables
+# Load environment variables (for local use)
 load_dotenv()
+
+# Safe API key loading
+api_key = os.getenv("OPENAI_API_KEY", None)
+if not api_key:
+    api_key = st.secrets.get("OPENAI_API_KEY", "")
 
 # Initialize OpenAI client
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key=os.getenv("OPENAI_API_KEY")
+    api_key=api_key
 )
 
+# Cached OCR model loader
 @st.cache_resource
 def load_model():
-    reader = easyocr.Reader(['en', 'hi', 'mr'], gpu=False)
-    return reader
-
-# Initialize EasyOCR
-#reader = easyocr.Reader(['en', 'hi', 'mr'])
+    return easyocr.Reader(['en', 'hi', 'mr'], gpu=False)
 
 # Helper Functions
 def fix_common_ocr_errors(text):
@@ -66,14 +68,19 @@ OCR Extracted Text:
 
 Answer with one word only: REAL or FAKE
 """
-    response = client.chat.completions.create(
-        model="google/gemma-3n-e2b-it:free",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.2
-    )
-    return response.choices[0].message.content.strip().upper()
+    try:
+        response = client.chat.completions.create(
+            model="google/gemma-3n-e2b-it:free",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2
+        )
+        return response.choices[0].message.content.strip().upper()
+    except Exception as e:
+        st.error(f"API Error: {e}")
+        return "UNKNOWN"
 
-# Streamlit Page Settings and CSS
+# ---------------- Streamlit UI ---------------- #
+
 st.set_page_config(page_title="Fake News Detector", layout="centered")
 
 st.markdown("""
@@ -98,7 +105,6 @@ st.markdown("""
         font-weight: bold;
         font-family: 'Comic Sans MS', cursive, sans-serif;
     }
-
     .stTextArea textarea {
         border-radius: 10px;
         border: 1px solid #ccc;
@@ -113,7 +119,6 @@ st.markdown("""
         color: #2c3e50;
         border: 2px dashed #aaa;
         font-weight: 600;
-        
     }
     .custom-btn button {
         background-color: #b2fefa !important;
@@ -127,31 +132,38 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- UI ---
+# Header
 st.markdown('<div class="container">Fake News Detector</div>', unsafe_allow_html=True)
-st.markdown("### Paste or Type News Article:")
 
+# Text Input
+st.markdown("### Paste or Type News Article:")
 input_text = st.text_area("Type or paste the news article here...", label_visibility="collapsed")
 
+# Image Input
 st.markdown("### <center>OR</center>", unsafe_allow_html=True)
 st.markdown("### Upload a Screenshot / Image:")
-
 uploaded_file = st.file_uploader("", type=["jpg", "png", "jpeg"])
 if uploaded_file:
     st.markdown('<div class="uploaded-label">Uploaded</div>', unsafe_allow_html=True)
 
+# Detect Button
 st.markdown('<div class="custom-btn">', unsafe_allow_html=True)
 detect = st.button("🔍 Detect")
-st.markdown('</div></div>', unsafe_allow_html=True)  # close button div & container
+st.markdown('</div></div>', unsafe_allow_html=True)  # close button & container
 
-# --- Detection Logic ---
+# --- Detection Logic --- #
 if detect:
     with st.spinner("Analyzing..."):
         if uploaded_file:
-            img = Image.open(uploaded_file)
-            img_array = np.array(img)
-            ocr_text = ' '.join(reader.readtext(img_array, detail=0, paragraph=True))
-            news_input = ocr_text
+            try:
+                img = Image.open(uploaded_file)
+                img_array = np.array(img)
+                reader = load_model()
+                ocr_text = ' '.join(reader.readtext(img_array, detail=0, paragraph=True))
+                news_input = ocr_text
+            except Exception as e:
+                st.error(f"OCR Error: {e}")
+                st.stop()
         elif input_text.strip():
             news_input = input_text
         else:
@@ -163,6 +175,10 @@ if detect:
         fixed = fix_common_ocr_errors(translated)
         prediction = ask_gpt(fixed)
 
-    st.success(f" Prediction: **{prediction}**")
+    if prediction in ["REAL", "FAKE"]:
+        st.success(f"🎯 Prediction: **{prediction}**")
+    else:
+        st.warning("⚠️ Unable to classify the news reliably.")
+
     st.markdown("### 📝 Processed Text")
     st.info(fixed)
