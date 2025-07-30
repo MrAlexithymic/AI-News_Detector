@@ -87,28 +87,29 @@ st.markdown("""
     <style>
     html, body, [class*="css"]  {
         font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(to right, #fdfcfb, #e2d1c3);
+        background: linear-gradient(135deg, #fef6e4,rgb(224, 239, 249));
     }
     .container {
         background-color: #ffffff;
         top: 50px;
         border-radius: 15px;
         box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
-        border: 2px dotted #b5d4e5;
+        border: 2px dashed #b5d4e5;
         width: 100%;
         max-width: 700px;
         margin: auto;
         margin-top: 3rem;
         text-align: center;
-        color:black;
+        color: black;
         font-size: 2rem;
         font-weight: bold;
         font-family: 'Comic Sans MS', cursive, sans-serif;
+        padding: 1rem 2rem;
     }
     .stTextArea textarea {
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        padding: 1rem;
+        border-radius: 10px !important;
+        border: 1px solid #ccc !important;
+        padding: 1rem !important;
     }
     .uploaded-label {
         display: block;
@@ -119,15 +120,25 @@ st.markdown("""
         color: #2c3e50;
         border: 2px dashed #aaa;
         font-weight: 600;
+        margin-top: 1rem;
     }
-    .custom-btn button {
+    .detect-button-container {
+        display: flex;
+
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    .detect-button-container button {
         background-color: #b2fefa !important;
-        border-radius: 10px;
-        padding: 0.6rem 1rem;
-        font-weight: bold;
-        font-size: 1.1rem;
-        width: 100%;
+        border-radius: 10px !important;
+        padding: 0.7rem 2rem !important;
+        font-weight: bold !important;
+        font-size: 1.2rem !important;
         color: black !important;
+        border: none !important;
+    }
+    .stFileUploader {
+        text-align: center !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -146,10 +157,10 @@ uploaded_file = st.file_uploader("", type=["jpg", "png", "jpeg"])
 if uploaded_file:
     st.markdown('<div class="uploaded-label">Uploaded</div>', unsafe_allow_html=True)
 
-# Detect Button
-st.markdown('<div class="custom-btn">', unsafe_allow_html=True)
+# Detect Button 
+st.markdown('<div class="detect-button-container">', unsafe_allow_html=True)
 detect = st.button("🔍 Detect")
-st.markdown('</div></div>', unsafe_allow_html=True)  # close button & container
+st.markdown('</div>', unsafe_allow_html=True)
 
 # --- Detection Logic --- #
 if detect:
